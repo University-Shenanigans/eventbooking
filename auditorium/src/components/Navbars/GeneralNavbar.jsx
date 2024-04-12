@@ -6,7 +6,7 @@ const navigation = [
   { name: 'About', href: '#', current: true ,toAddress:"/About"},
   { name: 'Schedule', href: '#', current: false,toAddress:"/Schedule" },
   { name: 'Admin', href: '#', current: false ,toAddress:"/Admin"},
-  { name: 'Test', href: '#', current: false ,toAddress:"/Test"},
+  { name: 'Register', href: '#', current: false ,toAddress:"/register"},
 ]
 
 function classNames(...classes) {
@@ -40,11 +40,8 @@ export default function Test() {
                     alt="Your Company"
                   /></Link>
                 </div>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                   
-                  </div>
-                </div>
+                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-center">
+                <p className="flex flex-shrink-0 items-center text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-5xl font-9xl ">AUDIB</p></div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <div className="flex space-x-4">

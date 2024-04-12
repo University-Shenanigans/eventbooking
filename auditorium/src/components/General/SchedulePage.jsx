@@ -1,6 +1,47 @@
-import React from 'react'
+import React,{useState} from 'react'
 import GeneralNavbar from "../Navbars/GeneralNavbar"
 export default function SchedulePage() {
+  const [formData, setFormData] = useState({
+    eventName: '',
+    auditorium: '',
+    fromtime: '',
+    totime: '',
+    noOfAttendees: '',
+    department: '',
+    category: '',
+    email: '',
+    firstperson: '',
+    faculty: '',
+    phone: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Do something with the form data, such as sending it to a server
+    console.log(formData);
+    // Reset the form after submission
+    setFormData({
+      eventName: '',
+      auditorium: '',
+      fromtime: '',
+      totime: '',
+      noOfAttendees: '',
+      department: '',
+      category: '',
+      email: '',
+      firstperson: '',
+      faculty: '',
+      phone: ''
+    });
+  };
   return (
     <div>
       <GeneralNavbar/>
@@ -18,7 +59,7 @@ export default function SchedulePage() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="eventName" className="block text-sm font-medium leading-6 text-gray-900">
                 Event Name
@@ -27,6 +68,9 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="eventName"
+                  value={formData.eventName}
+              onChange={handleChange}
+              
                   type="text"
                   autoComplete="email"
                   required
@@ -42,6 +86,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="auditorium"
+                  value={formData.auditorium}
+                  onChange={handleChange}
                   type="text"
                   autoComplete="email"
                   required
@@ -57,6 +103,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="fromtime"
+                  value={formData.fromtime}
+              onChange={handleChange}
                   type="datetime-local"
                   autoComplete="email"
                   required
@@ -72,6 +120,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="totime"
+                  value={formData.totime}
+              onChange={handleChange}
                   type="datetime-local"
                   autoComplete="email"
                   required
@@ -87,6 +137,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="noOfAttendees"
+                  value={formData.noOfAttendees}
+                  onChange={handleChange}
                   type="number"
                   autoComplete="email"
                   required
@@ -103,6 +155,8 @@ export default function SchedulePage() {
                   id="email"
                   name="department"
                   type="text"
+                  value={formData.department}
+                  onChange={handleChange}
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -117,6 +171,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="category"
+                  value={formData.category}
+                  onChange={handleChange}
                   type="text"
                   autoComplete="email"
                   required
@@ -132,6 +188,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   type="email"
                   autoComplete="email"
                   required
@@ -147,6 +205,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="firstperson"
+                  value={formData.firstperson}
+                  onChange={handleChange}
                   type="text"
                   autoComplete="email"
                   required
@@ -161,7 +221,9 @@ export default function SchedulePage() {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="Faculty"
+                  name="faculty"
+                  value={formData.faculty}
+              onChange={handleChange}
                   type="text"
                   autoComplete="email"
                   required
@@ -177,6 +239,8 @@ export default function SchedulePage() {
                 <input
                   id="email"
                   name="phone"
+                  value={formData.phone}
+              onChange={handleChange}
                   type="text"
                   autoComplete="email"
                   required
@@ -191,7 +255,7 @@ export default function SchedulePage() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Submit
               </button>
             </div>
           </form>
