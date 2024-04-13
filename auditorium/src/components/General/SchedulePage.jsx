@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import GeneralNavbar from "../Navbars/GeneralNavbar"
+import { jwtDecode } from 'jwt-decode'
 export default function SchedulePage() {
   const [formData, setFormData] = useState({
     eventName: '',
@@ -23,12 +24,32 @@ export default function SchedulePage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Do something with the form data, such as sending it to a server
     console.log(formData);
+    const token = localStorage.getItem('token')
+		if (token) {
+			const user = jwtDecode(token)
+      console.log("user:",user)
+      const response = await fetch('http://localhost:1337/api/Booking',{
+        method: 'POST', 
+        headers:{
+            'Content-Type':'application/json',
+        },
+        body:JSON.stringify({
+            ...formData,
+            username:user.name,
+
+        }),
+    })
+    
+    const data = await response.json();
+    console.log(data); // Log the response from the server
+    
+    }
     // Reset the form after submission
-    setFormData({
+    /*setFormData({
       eventName: '',
       auditorium: '',
       fromtime: '',
@@ -40,7 +61,7 @@ export default function SchedulePage() {
       firstperson: '',
       faculty: '',
       phone: ''
-    });
+    });*/
   };
   return (
     <div>
