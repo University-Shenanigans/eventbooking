@@ -79,26 +79,38 @@ app.post('/api/Booking',async (req,res)=>{
 app.post('/api/CheckTime', async (req, res) => {
   // Extract the requested time range from the request body
   const { fromtime, totime } = req.body;
-
+  
+  const ft = new Date(fromtime);
+  const tt = new Date(totime);
+  const utcTimestampft = ft.toISOString();
+  const utcTimestamptt = tt.toISOString();
+  // Convert the original date to UTC using toISOString()
+  
   // Find all bookings that are accepted
   const bookings = await Bookings.find({ isAccepted: 1 });
 
   // Check for collisions with each booking
   const overlappingBookings = bookings.filter(booking => {
+    // Convert booking time to UTC
+    const bookingFromTime = new Date(booking.fromtime).toISOString();
+    const bookingToTime = new Date(booking.totime).toISOString();
+    
     // Check if the requested time range overlaps with the booking's time range
     const overlaps =
-      (fromtime < booking.totime && totime > booking.fromtime) || // Requested range overlaps with existing range
-      (fromtime >= booking.fromtime && totime <= booking.totime) || // Requested range is completely within existing range
-      (fromtime <= booking.fromtime && totime >= booking.totime); // Existing range is completely within requested range
+      (utcTimestampft < bookingToTime && utcTimestamptt > bookingFromTime) || // Requested range overlaps with existing range
+      (utcTimestampft >= bookingFromTime && utcTimestamptt <= bookingToTime) || // Requested range is completely within existing range
+      (utcTimestampft <= bookingFromTime && utcTimestamptt >= bookingToTime); // Existing range is completely within requested range
+  
     return overlaps;
   });
+  
 
   // If there are overlapping bookings, send a response indicating collision
   if (overlappingBookings.length > 0) {
-    res.status(400).json({ message: 'Collision detected with existing bookings', overlappingBookings });
+    res.status(400).json({ collision: 1, overlappingBookings });
   } else {
     // If no collisions, send success response
-    res.status(200).json({ message: 'No collision detected' });
+    res.status(200).json({ collision: 0});
   }
 });
 

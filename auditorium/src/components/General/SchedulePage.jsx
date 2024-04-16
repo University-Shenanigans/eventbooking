@@ -37,7 +37,7 @@ export default function SchedulePage() {
     const token = localStorage.getItem('token')
 		if (token) {
 			const user = jwtDecode(token)
-      const response = await fetch('http://localhost:1337/api/CheckTime',{
+      const resp = await fetch('http://localhost:1337/api/CheckTime',{
         method: 'POST', 
         headers:{
             'Content-Type':'application/json',
@@ -48,9 +48,15 @@ export default function SchedulePage() {
 
         }),
     });
-    const data = await response.json();
-    console.log(data); // Log the response from the server*/
-      /*const response = await fetch('http://localhost:1337/api/Booking',{
+    const data1 = await resp.json();
+    if(data1.collision===1)
+    {
+      alert("there is an existing event within this timeframe please select some other range")
+    }
+    else
+    {
+      // Log the response from the server*/
+      const response = await fetch('http://localhost:1337/api/Booking',{
         method: 'POST', 
         headers:{
             'Content-Type':'application/json',
@@ -63,7 +69,22 @@ export default function SchedulePage() {
     })
     
     const data = await response.json();
-    console.log(data); // Log the response from the server*/
+    console.log(data);
+    alert("the event request has been accepted")
+    setFormData({
+      eventName: '',
+      auditorium: '',
+      fromtime: '',
+      totime: '',
+      noOfAttendees: '',
+      department: '',
+      category: '',
+      email: '',
+      firstperson: '',
+      faculty: '',
+      phone: ''
+    }); // Log the response from the server*/
+    } 
     
     }
     // Reset the form after submission

@@ -8,7 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export default function Calender() {
   const [cred, setCred] = useState(null)
-  const [event,setEvents] = useState(null)
+  const [event,setEvents] = useState([])
   const localizer = momentLocalizer(moment)
   useEffect(() => {
    
@@ -20,30 +20,34 @@ export default function Calender() {
             'Content-Type': 'application/json',
           },
         });
-
+    
         if (!response.ok) {
           throw new Error(`Failed to fetch bookings: ${response.status}`);
         }
-
+    
         const data = await response.json();
-        // Filter bookings where isAccepted is 0 (not accepted yet)
-        const filteredData = data
-        setCred(filteredData);
-        console.log(filteredData)
-        const events = filteredData.map((item)=>{
-           const obj =  {
-              title:item.eventName,
-              start:new Date(item.fromtime),
-              end:new Date(item.totime)
-            }
-            return obj
-        })
-        console.log(events)
-        setEvents(events)
+        
+        // Filter bookings where isAccepted is 1
+        const acceptedBookings = data.filter(booking => booking.isAccepted === 1);
+        
+        // Set the filtered bookings to the state
+        setCred(acceptedBookings);
+        console.log(acceptedBookings);
+    
+        // Convert the filtered bookings to events format
+        const events = acceptedBookings.map((item) => ({
+          title: item.eventName,
+          start: new Date(item.fromtime),
+          end: new Date(item.totime)
+        }));
+    
+        console.log(events);
+        setEvents(events);
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
     };
+    
 
     fetchBookings();
   }, [])
