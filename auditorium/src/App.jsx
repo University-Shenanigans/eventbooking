@@ -10,6 +10,7 @@ import Register from './components/Authentication/register'
 import Login from './components/Authentication/Login'
 import DashBoard from './components/Admin/DashBoard'
 import UserDashBoard from './components/General/UserDashBoard'
+import IndividualView from './components/General/IndividualView'
 import { Routes, Route } from "react-router-dom"
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/Test" element={<Test/>}/>
             <Route path="/About" element={<About/>}/>
             <Route path="/calendar" element={<Calender/>}/>
+            <Route path="/user/View" element={<IndividualView/>}/>
       </Routes>
    
     </div>

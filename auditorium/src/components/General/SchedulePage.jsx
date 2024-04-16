@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import GeneralNavbar from "../Navbars/GeneralNavbar"
+import UserNavbar from "../Navbars/UserNavbar"
 import { jwtDecode } from 'jwt-decode'
 export default function SchedulePage() {
   const [formData, setFormData] = useState({
@@ -26,13 +27,30 @@ export default function SchedulePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (new Date(formData.totime) <= new Date(formData.fromtime)) {
+      // If to time is not greater than from time, display an error message
+      alert("To time must be greater than From time");
+      return; // Exit the function
+    }
     // Do something with the form data, such as sending it to a server
-    console.log(formData);
+    
     const token = localStorage.getItem('token')
 		if (token) {
 			const user = jwtDecode(token)
-      console.log("user:",user)
-      const response = await fetch('http://localhost:1337/api/Booking',{
+      const response = await fetch('http://localhost:1337/api/CheckTime',{
+        method: 'POST', 
+        headers:{
+            'Content-Type':'application/json',
+        },
+        body:JSON.stringify({
+            ...formData,
+            
+
+        }),
+    });
+    const data = await response.json();
+    console.log(data); // Log the response from the server*/
+      /*const response = await fetch('http://localhost:1337/api/Booking',{
         method: 'POST', 
         headers:{
             'Content-Type':'application/json',
@@ -45,7 +63,7 @@ export default function SchedulePage() {
     })
     
     const data = await response.json();
-    console.log(data); // Log the response from the server
+    console.log(data); // Log the response from the server*/
     
     }
     // Reset the form after submission
@@ -65,7 +83,7 @@ export default function SchedulePage() {
   };
   return (
     <div>
-      <GeneralNavbar/>
+      <UserNavbar/>
   
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">

@@ -76,6 +76,34 @@ app.post('/api/Booking',async (req,res)=>{
         res.json({status:'error',error:err})
        }
 })
+app.post('/api/CheckTime', async (req, res) => {
+  // Extract the requested time range from the request body
+  const { fromtime, totime } = req.body;
+
+  // Find all bookings that are accepted
+  const bookings = await Bookings.find({ isAccepted: 1 });
+
+  // Check for collisions with each booking
+  const overlappingBookings = bookings.filter(booking => {
+    // Check if the requested time range overlaps with the booking's time range
+    const overlaps =
+      (fromtime < booking.totime && totime > booking.fromtime) || // Requested range overlaps with existing range
+      (fromtime >= booking.fromtime && totime <= booking.totime) || // Requested range is completely within existing range
+      (fromtime <= booking.fromtime && totime >= booking.totime); // Existing range is completely within requested range
+    return overlaps;
+  });
+
+  // If there are overlapping bookings, send a response indicating collision
+  if (overlappingBookings.length > 0) {
+    res.status(400).json({ message: 'Collision detected with existing bookings', overlappingBookings });
+  } else {
+    // If no collisions, send success response
+    res.status(200).json({ message: 'No collision detected' });
+  }
+});
+
+
+
 app.get('/api/GetBookings', async (req, res) => {
     try {
         const bookings = await Bookings.find(); // Retrieve all bookings
@@ -85,6 +113,53 @@ app.get('/api/GetBookings', async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Internal server error' }); // Send a more informative error response
     }
 });
+// PUT /api/bookings/:id to update a booking by its _id
+app.put('/api/bookings/accept/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Validate _id format (optional, recommended)
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ status: 'error', message: 'Invalid _id format' });
+      }
+  
+      const updateData = {isAccepted:1}; // Update only the isAccepted field
+      
+      const updatedBooking = await Bookings.findByIdAndUpdate(id, updateData, { new: true });
+  
+      if (!updatedBooking) {
+        return res.status(404).json({ status: 'error', message: 'Booking not found' });
+      }
+  
+      res.json(updatedBooking); // Send the updated booking data in the response
+    } catch (err) {
+      console.error('Error updating booking:', err);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+  });
+app.put('/api/bookings/reject/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+     
+      // Validate _id format (optional, recommended)
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ status: 'error', message: 'Invalid _id format' });
+      }
+  
+      const updateData = {isAccepted:2};
+     
+      const updatedBooking = await Bookings.findByIdAndUpdate(id, updateData, { new: true });
+  
+      if (!updatedBooking) {
+        return res.status(404).json({ status: 'error', message: 'Booking not found' });
+      }
+  
+      res.json(updatedBooking); // Send the updated booking data in the response
+    } catch (err) {
+      console.error('Error updating booking:', err);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+  });
 app.listen(1337,()=>{
     console.log("server started");
 })
