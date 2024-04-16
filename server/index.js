@@ -4,8 +4,9 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.models')
 const Bookings = require('./models/Bookings.models')
+const dotenv = require('dotenv').config();
 const jwt = require('jsonwebtoken')
-mongoose.connect('mongodb+srv://charlieuser0:poNFWjjguvWnDmU5@cluster0.ilj5gvx.mongodb.net/SampleAudiBooking-Dev?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URL)
 app.use(cors())
 app.use(express.json())
 app.post('/api/register',async (req,res)=>{
