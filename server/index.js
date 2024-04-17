@@ -88,7 +88,12 @@ app.post('/api/CheckTime', async (req, res) => {
   // Convert the original date to UTC using toISOString()
   
   // Find all bookings that are accepted
-  const bookings = await Bookings.find({ isAccepted: 1 });
+  const bookings = await Bookings.find({
+    $or: [
+      { isAccepted: 1 },
+      { isAccepted: 0 },
+    ],
+  });
 
   // Check for collisions with each booking
   const overlappingBookings = bookings.filter(booking => {

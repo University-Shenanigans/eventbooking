@@ -12,7 +12,7 @@ export default function Login() {
     
     const submit = async (event)=>{
         event.preventDefault();
-        const response = await fetch('http://localhost:1337/api/login',{
+        const response = await fetch('https://eventbooking-8dlr.onrender.com/api/login',{
             method: 'POST', 
             headers:{
                 'Content-Type':'application/json',

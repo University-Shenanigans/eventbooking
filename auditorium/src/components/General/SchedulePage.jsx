@@ -37,7 +37,7 @@ export default function SchedulePage() {
     const token = localStorage.getItem('token')
 		if (token) {
 			const user = jwtDecode(token)
-      const resp = await fetch('http://localhost:1337/api/CheckTime',{
+      const resp = await fetch('https://eventbooking-8dlr.onrender.com/api/CheckTime',{
         method: 'POST', 
         headers:{
             'Content-Type':'application/json',
@@ -56,7 +56,7 @@ export default function SchedulePage() {
     else
     {
       // Log the response from the server*/
-      const response = await fetch('http://localhost:1337/api/Booking',{
+      const response = await fetch('https://eventbooking-8dlr.onrender.com/api/Booking',{
         method: 'POST', 
         headers:{
             'Content-Type':'application/json',
@@ -71,6 +71,7 @@ export default function SchedulePage() {
     const data = await response.json();
     console.log(data);
     alert("the event request has been accepted")
+    /*
     setFormData({
       eventName: '',
       auditorium: '',
@@ -83,7 +84,7 @@ export default function SchedulePage() {
       firstperson: '',
       faculty: '',
       phone: ''
-    }); // Log the response from the server*/
+    });*/
     } 
     
     }

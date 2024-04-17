@@ -10,7 +10,7 @@ export default function IndividualView() {
    
       const fetchBookings = async () => {
         try {
-          const response = await fetch('http://localhost:1337/api/GetBookings', {
+          const response = await fetch('https://eventbooking-8dlr.onrender.com/api/GetBookings', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

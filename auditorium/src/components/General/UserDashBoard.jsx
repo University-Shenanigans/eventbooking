@@ -2,11 +2,21 @@ import React from 'react'
 import { useEffect, useState } from "react"
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns';
+import moment from"moment";
 import UserNavbar from '../Navbars/UserNavbar'
 import { Link } from 'react-router-dom';
 export default function UserDashBoard() {
   const [cred, setCred] = useState(null)
   const [user, setUser] = useState("")
+  const convertUTCToLocalTime = (dateString) => {
+    const momentObj = moment(dateString);
+    const formattedTime = momentObj.utc().format('h:mm a');
+    const formattedDate = momentObj.format('MMMM Do YYYY');
+    const formattedDateTime = `${formattedDate} ${formattedTime} `;
+
+return formattedDateTime; // Output: 11:25 am on April 17th 2024
+    
+  };
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -20,7 +30,7 @@ export default function UserDashBoard() {
     }
     const fetchBookings = async () => {
       try {
-        const response = await fetch('http://localhost:1337/api/GetBookings', {
+        const response = await fetch('https://eventbooking-8dlr.onrender.com/api/GetBookings', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -63,10 +73,12 @@ export default function UserDashBoard() {
                 {item['eventName'] || 'N/A'}  {/* Display 'N/A' for missing values */}
               </p>
              
-              <p className="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white">
-                 {format(new Date(item['fromtime']), 'MMMM d, yyyy h:mm a')} - {format(new Date(item['totime']), 'MMMM d, yyyy h:mm a')}
-              </p>
-             
+         
+<p className="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white">
+                  {convertUTCToLocalTime(item['fromtime'])}
+                  {' - '}
+                  {convertUTCToLocalTime(item['totime'])}
+                </p>
               <p className={`mb-2 text-2xl tracking-tight ${item['isAccepted'] === 1 ? 'text-green-500' : (item['isAccepted'] === 2 ? 'text-red-500' : 'text-gray-900')} dark:text-white`}>
                 {item['isAccepted'] === 1 ? 'Accepted' : (item['isAccepted'] === 2 ? 'Rejected' : 'Decision Pending')}
               </p>
